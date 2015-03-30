@@ -1,3 +1,2 @@
 # Gs2Pass
 Lets you input the 260-character-long password for Golden Sun 2 fast (GS2 needs to be on VisualBoyAdvance emulator)
-For now, the GBA's 'A' button is hardcoded as 'x' on my script and you should change your 'A' button to 'x'. I will add in a configure key feature later...
