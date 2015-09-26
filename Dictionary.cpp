@@ -45,11 +45,3 @@ DICTFN int lookup(int input) { //this was prepared according to ANSI code chart
         return parser(308, 315, input);
     }
 }
-
-int DICTFN testFn(int input) {
-    return input * 5;
-}
-
-int DICTFN testFn2(char input) {
-    return 10;
-}

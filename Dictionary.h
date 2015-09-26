@@ -11,8 +11,6 @@
 extern "C" {
 #endif
 
-    DICTFN int testFn(int input);
-    DICTFN int testFn2(char input);
     DICTFN int lookup(int input);
     DICTFN int parser(int begin, int end, char input);
 
