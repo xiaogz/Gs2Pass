@@ -9,12 +9,19 @@ DLL can be compiled through the `.sln` file found in `msvc_dll`. If you don't wa
 * make sure `<path leading to Microsoft Visual Studio 14.0>\VC` is in your path environment variable for `vcvarsall.bat`
 
 ## Usage
+#### Setup
+##### VisualBoyAdvance emulator options
+* Under `Options`->`Frame Skip`, make it `0` and disable `automatic throttling`.
+* Under `Options`->`Video`, make window 2x or 3x bigger (just for better visuals)
+* Under `Options`->`Joypad`->`Configure`->`1...`, make sure directions are mapped to arrow keys (should be default) and that GBA's `A` button is mapped to keyboard's `X`
+
 To use: after installing AHK, VisualBoyAdvance emulator, obtaining the ROM file, and building the DLL, open the 'pass.ahk' file. Then, open the emulator and load the Golden Sun 2 rom and navigate to the password input screen (like the picture shown below).
 
 ##### Password input screen
 ![](GS2PassScreen.png)
 
 Copy the contents of the 'GS2SamplePass.txt' into the textbox and click 'Go'.
+* to stop the script in the middle, right-click the AHK icon in quick-launch bar and either `Reload` or `Exit`.
 
 ##### Sample password
 This Gold password gives you all unlockable side quest events, Djinns, and end-game items from first Golden Sun game.
@@ -47,4 +54,4 @@ This Gold password gives you all unlockable side quest events, Djinns, and end-g
 > 3u?$7v2AUR
 
 Tool in action:
-
+![](gs2pass-demo.gif)
