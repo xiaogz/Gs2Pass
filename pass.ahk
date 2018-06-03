@@ -1,13 +1,17 @@
+; this directive basically "reloads" the script if another one is running
 #SingleInstance force
 
-InputString := Object()
+delay := 50
+hold_length = %delay%
+SetKeyDelay, %delay%, %hold_length%
+;this key delay prevents the script's keystrokes from being passed too fast for the emulator program or the OS to handle; this was configured on Intel Core i7-8550U Windows 10 so tweaking might be required
 
-SetKeyDelay, 10, 4  ;this key delay prevents the script's keystrokes from being passed too fast for the emulator program or the OS to handle; this was configured on Intel Core i5-2410M (2.3GHz) and Windows 7 Home Premium so tweaking might be required
+hModule := DllCall("LoadLibrary", "str", "dictionary.dll")
+;explicitly loads the Dictionary.dll file so ahk doesn't free the library after every call and then load it again
 
-hModule := DllCall("LoadLibrary", "str", "dictionary.dll")  
-;loads the Dictionary.dll file so ahk doesn't free the library after every call and then load it again
+InputString := Object() ;container to hold input text
 
-; this creates the GUI 
+; GUI initialization
 Gui, Add, Text,, Please copy-paste the GOLD password below
 Gui, Add, Edit, r35 vInputString, Replace this text with the password
 Gui, Add, Button, Default, Go
@@ -16,14 +20,12 @@ Gui, Add, Button,, Exit
 
 Gui, Show,, PasswordParser
 
-return 
-
-;stops sequential execution of code below and makes script wait for button presses
+return ;stops sequential execution of code below and makes script wait for button presses
 
 ButtonGo:
 {
     GuiControlGet, InputString
-    ;msgbox, Input is now "%InputString%" ;debugging   
+    ;msgbox, Input is now "%InputString%" ;debugging
     StringSplit, OutputArray, InputString,, %A_Space%`r`n
 }
 
@@ -34,17 +36,25 @@ IndexCount := 0
 
 ;msgbox, %ArrayCount%  ;debugging: shows # of password chars
 
-WinActivate, VisualBoyAdvance, VisualBoyAdvance
+if (WinExist("VisualBoyAdvance")) {
+    WinActivate
+    ;Sleep %delay% * 2
+}
+else {
+    msgbox, can't detect VisualBoyAdvance
+    Gui, Destroy
+}
 
 CurrCoord := 0
 
 Loop, %ArrayCount%
 {
-    
+
     IndexCount += 1  ;ahk-script "arrays" start at 1
     ArrayElement := Asc(OutputArray%IndexCount%) ;chars don't work in AHK scripts so have to pass them as ints
+    FutureCoord := DllCall("Gs2Pass\lookup", int, ArrayElement) ;somehow, with DllCall, you should not enclose variable parametre with % (that usually indicates it's a var and not a literal string)
 
-    FutureCoord := DllCall("dictionary\lookup", int, ArrayElement) ;somehow, with DllCall, you should not enclose variable parametre with % (that usually indicates it's a var and not a literal string)
+    ;msgbox, FutureCoord = %FutureCoord%
 
     x0 := CurrCoord // 100
     x1 := FutureCoord // 100
@@ -52,18 +62,24 @@ Loop, %ArrayCount%
     y1 := mod(FutureCoord, 100)
 
     deltax := x1 - x0
-    rowKeys := abs(x1 - x0) 
+    ;msgbox, deltax = %deltax%
+    rowKeys := abs(deltax)
+    ;msgbox, rowKeys = %rowKeys%
     if (deltax < 0) {
         Send {Up %rowKeys%}
     }
     else if (deltax = 0) {
     }
     else {
-        Send {Down %rowKeys%}        
+        Send {Down %rowKeys%}
     }
 
-    deltay := y1 - y0    
-    colKeys := abs(y1 - y0)
+    ;Sleep %delay%
+
+    deltay := y1 - y0
+    ;msgbox, deltay = %deltay%
+    colKeys := abs(deltay)
+    ;msgbox, colKeys = %colKeys%
     if (deltay < 0) {
         Send {Left %colKeys%}
     }
@@ -71,12 +87,14 @@ Loop, %ArrayCount%
     }
     else {
         Send {Right %colKeys%}
-    }    
+    }
 
-    Send {x}
+    Sleep %delay%
 
-    CurrCoord := FutureCoord 
+    Send, x
 
+    CurrCoord := FutureCoord
+    Sleep %delay%
 }
 return
 
@@ -86,10 +104,10 @@ ButtonHelp:
 }
 return
 
-ButtonExit: 
+ButtonExit:
 {
-    Gui, Destroy    
+    Gui, Destroy
 }
 return
 
-DllCall("FreeLibrary", "UInt", hModule)  
+DllCall("FreeLibrary", "UInt", hModule)
