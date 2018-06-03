@@ -1,0 +1,11 @@
+*.dll
+*.exp
+*.ilk
+*.lib
+*.pdb
+.build/
+.vs/
+Debug/
+*.opendb
+*.VC.db
+*.user
