@@ -1,10 +1,10 @@
 ; this directive basically "reloads" the script if another one is running
 #SingleInstance force
 
-delay := 50
+delay := 40
 hold_length = %delay%
 SetKeyDelay, %delay%, %hold_length%
-;this key delay prevents the script's keystrokes from being passed too fast for the emulator program or the OS to handle; this was configured on Intel Core i7-8550U Windows 10 so tweaking might be required
+;this key delay prevents the script's keystrokes from being sent too fast for the emulator program to handle; this was configured on Intel Core i7-8550U Windows 10 so tweaking might be required
 
 hModule := DllCall("LoadLibrary", "str", "dictionary.dll")
 ;explicitly loads the Dictionary.dll file so ahk doesn't free the library after every call and then load it again
@@ -89,12 +89,12 @@ Loop, %ArrayCount%
         Send {Right %colKeys%}
     }
 
-    Sleep %delay%
+    ;Sleep %delay%
 
     Send, x
 
     CurrCoord := FutureCoord
-    Sleep %delay%
+    ;Sleep %delay%
 }
 return
 
@@ -111,3 +111,4 @@ ButtonExit:
 return
 
 DllCall("FreeLibrary", "UInt", hModule)
+
